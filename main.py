@@ -197,7 +197,9 @@ def main():
     elif args.files:
         cli_mode(args)
     else:
-        parser.print_help()
+        # No arguments = double-clicked or launched without args → open GUI
+        from gui import main as gui_main
+        gui_main()
 
 
 if __name__ == '__main__':
