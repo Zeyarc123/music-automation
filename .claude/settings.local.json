@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api:*)",
+      "Bash(pip show:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.digitaldjtips.com)",
+      "WebFetch(domain:djtechtools.com)",
+      "Bash(pip --version)",
+      "Bash(pip install:*)",
+      "Bash(python -c \"import analyzer; print\\(''Module loads OK''\\)\")",
+      "Bash(python analyzer.py \"C:/Users/naseu/OneDrive/Documents/Image-Line/FL Studio/Projects/Project_84/64 BPM F# minor - loop melancolique female voice.wav\" --min-bpm 50 --max-bpm 180)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}
