@@ -8,6 +8,7 @@ import librosa
 import os
 import sys
 import json
+from genre_detector import detect_genre
 
 
 # Krumhansl-Kessler key profiles (standard in music information retrieval)
@@ -114,14 +115,14 @@ def detect_bpm_beat_track(y, sr):
     """Method 1: librosa.beat.beat_track (dynamic programming)."""
     tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
     tempo = np.atleast_1d(tempo)[0]
-    return float(np.round(tempo, 1))
+    return float(np.round(tempo))
 
 
 def detect_bpm_onset(y, sr):
     """Method 2: Onset-based autocorrelation."""
     onset_env = librosa.onset.onset_strength(y=y, sr=sr)
     tempo = librosa.feature.tempo(onset_envelope=onset_env, sr=sr)
-    return float(np.round(tempo[0], 1))
+    return float(np.round(tempo[0]))
 
 
 def detect_bpm_tempogram(y, sr):
@@ -132,7 +133,7 @@ def detect_bpm_tempogram(y, sr):
     tempo_frequencies = np.abs(np.fft.rfft(np.mean(tempogram, axis=1)))
     # Use librosa's built-in tempo estimation with tempogram
     tempo = librosa.feature.tempo(onset_envelope=onset_env, sr=sr, aggregate=None)
-    return float(np.round(np.median(tempo), 1))
+    return float(np.round(np.median(tempo)))
 
 
 def normalize_bpm(bpm, min_bpm=70, max_bpm=180):
@@ -141,7 +142,7 @@ def normalize_bpm(bpm, min_bpm=70, max_bpm=180):
         bpm *= 2
     while bpm > max_bpm:
         bpm /= 2
-    return round(bpm, 1)
+    return round(bpm)
 
 
 def cross_check_bpm(bpm_results, min_bpm=70, max_bpm=180):
@@ -153,17 +154,17 @@ def cross_check_bpm(bpm_results, min_bpm=70, max_bpm=180):
     spread = max(normalized) - min(normalized)
 
     if spread <= 5:
-        final_bpm = round(np.median(normalized), 1)
+        final_bpm = round(np.median(normalized))
         confidence = 'high'
     elif spread <= 15:
-        final_bpm = round(np.median(normalized), 1)
+        final_bpm = round(np.median(normalized))
         confidence = 'medium'
     else:
-        final_bpm = round(np.median(normalized), 1)
+        final_bpm = round(np.median(normalized))
         confidence = 'low'
 
     # Also provide the half-time BPM as an alternative
-    half_bpm = round(final_bpm / 2, 1)
+    half_bpm = round(final_bpm / 2)
 
     return {
         'bpm': final_bpm,
@@ -194,12 +195,17 @@ def analyze_file(file_path, min_bpm=70, max_bpm=180):
     print("  Detecting key...")
     key_result = detect_key(y, sr)
 
+    # Detect genre
+    print("  Detecting genre...")
+    genre_result = detect_genre(y, sr, bpm=bpm_result['bpm'])
+
     return {
         'file': os.path.basename(file_path),
         'path': file_path,
         'duration_seconds': round(duration, 1),
         'bpm': bpm_result,
         'key': key_result,
+        'genre': genre_result,
     }
 
 
