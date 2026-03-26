@@ -223,9 +223,9 @@ def format_result(result, language='en'):
         ]
         if bpm_conf != 'high':
             raw = result['bpm']['raw_values']
-            lines.append(f"  /!\ Valeurs brutes BPM: {raw} — vérifiez manuellement")
+            lines.append(f"  /!\\ Valeurs brutes BPM: {raw} — vérifiez manuellement")
         if key_conf == 'low':
-            lines.append(f"  /!\ Tonalité incertaine, 2e choix: {result['key']['runner_up']}")
+            lines.append(f"  /!\\ Tonalité incertaine, 2e choix: {result['key']['runner_up']}")
     else:
         key_name = result['key']['key']
         mode = result['key']['mode']
@@ -240,9 +240,9 @@ def format_result(result, language='en'):
         ]
         if bpm_conf != 'high':
             raw = result['bpm']['raw_values']
-            lines.append(f"  /!\ Raw BPM values: {raw} — please verify manually")
+            lines.append(f"  /!\\ Raw BPM values: {raw} — please verify manually")
         if key_conf == 'low':
-            lines.append(f"  /!\ Key uncertain, runner-up: {result['key']['runner_up']}")
+            lines.append(f"  /!\\ Key uncertain, runner-up: {result['key']['runner_up']}")
 
     return '\n'.join(lines)
 
